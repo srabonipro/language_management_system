@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -42,18 +43,33 @@
                         <!-- Authentication Links -->
                         <li class="nav-item dropdown">
                             <a id="languageDropdown" class="nav-link dropdown-toggle" href="{{ route('language.index') }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ __('languages') }}
+                                {{ __('Select Language') }}
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="languageDropdown">
-                                <a class="dropdown-item" href="{{ route('set.language', 'default') }}">
+
+                                <a class="dropdown-item" href="#">
+                                    Default
+                                </a>
+
+                                @foreach (App\Models\Language::all() as $language)
+                                    @csrf
+                                    <a class="dropdown-item" href="{{ route('language.change', $language->code) }}">
+                                        {{ $language->name }}
+                                    </a>
+                                @endforeach
+
+
+                                {{-- <a class="dropdown-item" href="{{ route('set.language', 'default') }}">
                                     Default
                                 </a>
                                 @foreach (languages() as $language)
                                     <a class="dropdown-item" href="{{ route('set.language', $language->code) }}">
                                         {{ $language->name }}
                                     </a>
-                                @endforeach
+                                @endforeach --}}
+
+
                             </div>
                         </li>
 
@@ -72,7 +88,7 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{ route('language.index') }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ __('languages') }}
+                                    {{ __('language') }}
 
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">

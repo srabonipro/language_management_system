@@ -6,6 +6,8 @@ use App\Models\Language;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 
 class LanguageController extends Controller
 {
@@ -36,9 +38,14 @@ class LanguageController extends Controller
         return back();
     }
 
+    public function show(Language $language)
+    {
+        //
+    }
+
     public function transUpdate(Request $request)
     {
-        \Log::debug($request->all());
+        // \Log::debug($request->all());
         $language = Language::findOrFail($request->lang_id);
         $data = file_get_contents(base_path('resources/lang/' . $language->slug . '.json'));
 
@@ -52,8 +59,7 @@ class LanguageController extends Controller
             }
         }
 
-        file_put_contents(base_path('resources/lang/' . $language->slug . '.json'), json_encode($translations, JSON_PRETTY_PRINT));
-        file_put_contents(base_path('resources/lang/' . $language->slug . '.json'), json_encode($translations));
+        file_put_contents(base_path('resources/lang/' . $language->slug . '.json'), json_encode($translations, JSON_UNESCAPED_UNICODE));
         return back();
     }
 
@@ -68,7 +74,7 @@ class LanguageController extends Controller
         $data['country.title'] = "Change Manage Country";
 
         // Write File
-        $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
+        $newJsonString = json_encode($data, JSON_UNESCAPED_UNICODE);
         file_put_contents(base_path('resources/lang/en.json'), stripslashes($newJsonString));
 
         // Get Key Value
@@ -86,7 +92,7 @@ class LanguageController extends Controller
 
     public function setLanguage($language)
     {
-        \Log::info($language);
+        // \Log::info($language);
 
         $languagesArray = Language::pluck('slug')->toArray();
 
@@ -94,11 +100,24 @@ class LanguageController extends Controller
             abort(400);
         }
 
-        \Log::info('set translation');
+        // \Log::info('set translation');
 
         App::setLocale($language);
-
-        //
         return redirect()->back();
+    }
+
+
+    public function changeLanguage($code)
+    {
+        $langCode = Language::where('code', $code)->first();
+        App::setLocale($langCode->code);
+        Config::set('app.locale', $langCode->code);
+
+        return back();
+
+
+        // return Config::get('app.locale');
+        // return App::getLocale();
+        // config('app.locale');
     }
 }
