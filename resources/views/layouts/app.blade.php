@@ -38,6 +38,15 @@
 
                     </ul>
 
+                    @php
+                        if(Session::has('language_code')){
+                            $locale = Session::get('language_code', Config::get('app.locale'));
+                        }
+                        else{
+                            $locale = env('DEFAULT_LANGUAGE');
+                        }
+                    @endphp
+
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -47,29 +56,14 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="languageDropdown">
-
-                                <a class="dropdown-item" href="#">
-                                    Default
-                                </a>
-
-                                @foreach (App\Models\Language::all() as $language)
-                                    @csrf
-                                    <a class="dropdown-item" href="{{ route('language.change', $language->code) }}">
-                                        {{ $language->name }}
-                                    </a>
-                                @endforeach
-
-
-                                {{-- <a class="dropdown-item" href="{{ route('set.language', 'default') }}">
+                                <a class="dropdown-item" href="{{ route('set.language', 'en') }}">
                                     Default
                                 </a>
                                 @foreach (languages() as $language)
                                     <a class="dropdown-item" href="{{ route('set.language', $language->code) }}">
                                         {{ $language->name }}
                                     </a>
-                                @endforeach --}}
-
-
+                                @endforeach
                             </div>
                         </li>
 

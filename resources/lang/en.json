@@ -1,12 +1,12 @@
 {
-    "add_translation_for": "add_translation_for",
+    "add_translation_for": "add translation for",
     "back": "back",
     "languages": "languages",
     "laravel": "laravel",
-    "add_language": "add_language",
+    "add_language": "add language",
     "documentation": "documentation",
-    "laravel_news": "laravel_news",
-    "vibrant_ecosystem": "vibrant_ecosystem",
+    "laravel_news": "laravel news",
+    "vibrant_ecosystem": "vibrant ecosystem",
     "laracasts": "laracasts",
     "save": "save"
 }

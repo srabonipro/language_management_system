@@ -92,32 +92,25 @@ class LanguageController extends Controller
 
     public function setLanguage($language)
     {
-        // \Log::info($language);
-
-        $languagesArray = Language::pluck('slug')->toArray();
+        $languagesArray = Language::pluck('code')->toArray();
+        array_push($languagesArray, 'en');
 
         if (!in_array($language, $languagesArray)) {
             abort(400);
         }
 
-        // \Log::info('set translation');
-
         App::setLocale($language);
-        return redirect()->back();
+        return view('welcome');
     }
 
 
     public function changeLanguage($code)
     {
-        $langCode = Language::where('code', $code)->first();
+        session()->put('language_code', $code);
+        $langCode = Language::where('code', session('language_code'))->first();
         App::setLocale($langCode->code);
-        Config::set('app.locale', $langCode->code);
 
-        return back();
-
-
-        // return Config::get('app.locale');
-        // return App::getLocale();
-        // config('app.locale');
+        // $langCode = Language::where('code', $code)->first();
+        // App::setLocale($langCode->code);
     }
 }
